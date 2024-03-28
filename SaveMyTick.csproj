@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6A3E2B1A-8596-4DB6-8234-C60805066647}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AssemblyName>RegainTickOnCreation</AssemblyName>
+    <AssemblyName>SaveMyTick</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <ApplicationVersion>0.0.1</ApplicationVersion>
     <FileAlignment>512</FileAlignment>
@@ -40,7 +40,7 @@
     <Reference Include="SecretHistories.Interfaces" HintPath="D:\Steam\steamapps\common\Cultist Simulator\cultistsimulator_Data\Managed\SecretHistories.Interfaces.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RegainTickOnCreation.cs" />
+    <Compile Include="SaveMyTick.cs" />
     <Compile Include="../common/SettingTracker.cs" />
     <Compile Include="../common/PatchTracker.cs" />
     <Compile Include="Patches.cs" />

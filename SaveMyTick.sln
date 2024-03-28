@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F766647}") = "RegainTickOnCreation", "RegainTickOnCreation.csproj", "{6A3E2B1A-8596-4DB6-8234-C60805066647}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F766647}") = "SaveMyTick", "SaveMyTick.csproj", "{6A3E2B1A-8596-4DB6-8234-C60805066647}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

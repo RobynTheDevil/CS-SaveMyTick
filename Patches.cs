@@ -31,7 +31,7 @@ public class TracePatch : Patch
         }
         if (lifetime > 0.0f)
         {
-            NoonUtility.Log(string.Format("RegainTickOnCreation: Before Create Token: {0}, {1}", __instance, lifetime));
+            NoonUtility.Log(string.Format("SaveMyTick: Before Create Token: {0}, {1}", __instance, lifetime));
         }
     }
 
@@ -56,7 +56,7 @@ public class SituationPatch : Patch
         if (__result.Payload.GetType() != typeof(Situation))
             return;
         lifetime.SetValue(ticks + 1);
-        NoonUtility.Log(string.Format("RegainTickOnCreation: Saved Tick (Create Situation): {0} -> {1}", ticks, lifetime.GetValue<int>()));
+        NoonUtility.Log(string.Format("SaveMyTick: Saved Tick (Create Situation): {0} -> {1}", ticks, lifetime.GetValue<int>()));
         //NoonUtility.Log(string.Format("Action Source {0}", context.actionSource));
     }
 
@@ -88,7 +88,7 @@ public class ChangePatch : Patch
         if (ticks <= 0)
             return;
         lifetime.SetValue(ticks + 1);
-        NoonUtility.Log(string.Format("RegainTickOnCreation: Saved Tick (Card Change): {0} -> {1}", ticks, lifetime.GetValue<int>()));
+        NoonUtility.Log(string.Format("SaveMyTick: Saved Tick (Card Change): {0} -> {1}", ticks, lifetime.GetValue<int>()));
     }
     
 }
@@ -106,7 +106,7 @@ public class ConstructorPatch : Patch
             return;
         int result = (int) (((double)lifetimeRemaining * 100.0) + 0.1);
         Traverse.Create(__instance).Field("_lifetimeAccurate").SetValue(result);
-        NoonUtility.Log(string.Format("RegainTickOnCreation: Saved Tick (Construct): {0} -> {1}", lifetimeRemaining, result));
+        NoonUtility.Log(string.Format("SaveMyTick: Saved Tick (Construct): {0} -> {1}", lifetimeRemaining, result));
     }
 
 }
@@ -124,7 +124,7 @@ public class ConvertPatch : Patch
         if (time <= 0.0f)
             return;
         __result = (int) (((double)time * 100.0) + 0.1);
-        //NoonUtility.Log(string.Format("RegainTickOnCreation: Saved Tick (Convert): {0} -> {1}", time, __result));
+        //NoonUtility.Log(string.Format("SaveMyTick: Saved Tick (Convert): {0} -> {1}", time, __result));
     }
 
 }
@@ -145,7 +145,7 @@ public class AcceptPatch : Patch
         if (ticks <= 0)
             return;
         lifetime.SetValue(ticks + 1);
-        NoonUtility.Log(string.Format("RegainTickOnCreation: Saved Tick (Accept): {0} -> {1}, {2}, {3}", ticks, lifetime.GetValue<int>(), context.actionSource, token.Payload));
+        NoonUtility.Log(string.Format("SaveMyTick: Saved Tick (Accept): {0} -> {1}, {2}, {3}", ticks, lifetime.GetValue<int>(), context.actionSource, token.Payload));
     }
 
 }

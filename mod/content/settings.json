@@ -1,9 +1,9 @@
 {
     "settings": [
         {
-            "id": "RegainTickOnCreation",
+            "id": "SaveMyTick",
             "tabid": "UI_GAMEPLAY",
-            "hint": "UI_OPT_REGAINTICK",
+            "hint": "UI_OPT_SAVEMYTICK",
             "minvalue": 0,
             "maxvalue": 1,
             "defaultvalue": "1",

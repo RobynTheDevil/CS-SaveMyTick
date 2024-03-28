@@ -3,7 +3,7 @@
     {
       "id": "en",
       "uilabels$add": {
-        "UI_OPT_REGAINTICK": "Regain Tick",
+        "UI_OPT_SAVEMYTICK": "Save My Tick!",
         "UI_OPT_YES": "Yes",
         "UI_OPT_NO": "No"
       }
