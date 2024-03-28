@@ -13,25 +13,20 @@ using HarmonyLib;
 public class MainPatch : Patch
 {
     public MainPatch() {
-        this.original = AccessTools.Method(typeof(ElementStack), "FirstHeartbeat");
+        this.original = AccessTools.Method(typeof(NullPayload), "FirstHeartbeat");
         this.patch = AccessTools.Method(typeof(MainPatch), "Postfix");
     }
 
-        //int ind = PatchHelper.FindLdstrOperand(codes, "SituationTokenSpawn", 1);
-        //codes.Insert(ind - 4, new CodeInstruction(OpCodes.Dup)); //token
-        //codes.Insert(ind - 2, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Token), "get_Payload")));
-        //codes.Insert(ind - 1, new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(IManifestable), "GetTimeshadow")));
-        //codes.Insert(ind - 0, new CodeInstruction(OpCodes.Dup));
-        //codes.Insert(ind + 1, new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Timeshadow), "_lifetimeAccurate")));
-        //codes.Insert(ind + 2, new CodeInstruction(OpCodes.Ldc_I4_1));
-        //codes.Insert(ind + 3, new CodeInstruction(OpCodes.Add));
-        //codes.Insert(ind + 4, new CodeInstruction(OpCodes.Stfld, AccessTools.Field(typeof(Timeshadow), "_lifetimeAccurate")));
-    //    return codes.AsEnumerable();
-    //}
-
     public static void Postfix(ref Timeshadow ____timeshadow) {
-        Travese lifetime = Traverse.Create(____timeshadow).Field("_lifetimeAccurate");
+        Traverse lifetime = Traverse.Create(____timeshadow).Field("_lifetimeAccurate");
+        try {
+            NoonUtility.Log(string.Format("RegainTickOnCreation: First Heartbeat current {0}", lifetime.GetValue<int>()));
+        } catch {}
         lifetime.SetValue( lifetime.GetValue<int>() + 1 );
+        try {
+            NoonUtility.Log(string.Format("RegainTickOnCreation: First Heartbeat adjustment {0}, Trace {1}", lifetime.GetValue<int>(), new System.Diagnostics.StackTrace()));
+        } catch {}
+
     }
 
 }
