@@ -13,13 +13,15 @@ using HarmonyLib;
 public class RegainTickOnCreation : MonoBehaviour
 {
     public static PatchTracker mainPatch {get; private set;}
-    public static PatchTracker postPatch {get; private set;}
+    public static PatchTracker savePatch {get; private set;}
+    public static PatchTracker tracePatch {get; private set;}
 
     public void Start() {
         try
         {
-            RegainTickOnCreation.mainPatch = new PatchTracker("AlwaysShowTimers", new TracePatch(), WhenSettingUpdated);
-            RegainTickOnCreation.postPatch = new PatchTracker("AlwaysShowTimers", new PostPatch(), WhenSettingUpdated);
+            mainPatch = new PatchTracker("AlwaysShowTimers", new MainPatch("Postfix"), WhenSettingUpdated);
+            savePatch = new PatchTracker("AlwaysShowTimers", new SavePatch(), WhenSettingUpdated);
+            tracePatch = new PatchTracker("AlwaysShowTimers", new MainPatch("Prefix"), WhenSettingUpdated);
         }
         catch (Exception ex)
         {
