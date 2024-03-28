@@ -12,16 +12,17 @@ using HarmonyLib;
 
 public class RegainTickOnCreation : MonoBehaviour
 {
-    public static PatchTracker mainPatch {get; private set;}
-    public static PatchTracker savePatch {get; private set;}
-    public static PatchTracker tracePatch {get; private set;}
 
     public void Start() {
         try
         {
-            mainPatch = new PatchTracker("AlwaysShowTimers", new MainPatch("Postfix"), WhenSettingUpdated);
-            savePatch = new PatchTracker("AlwaysShowTimers", new SavePatch(), WhenSettingUpdated);
-            tracePatch = new PatchTracker("AlwaysShowTimers", new MainPatch("Prefix"), WhenSettingUpdated);
+            //new TracePatch().DoPatch();
+            new SituationPatch().DoPatch();
+            new ChangePatch("Prefix").DoPatch();
+            new ChangePatch("Postfix").DoPatch();
+            new ConstructorPatch().DoPatch();
+            new ConvertPatch().DoPatch();
+            new AcceptPatch().DoPatch();
         }
         catch (Exception ex)
         {
@@ -37,19 +38,5 @@ public class RegainTickOnCreation : MonoBehaviour
         NoonUtility.Log("RegainTickOnCreation: Initialised");
 	}
 
-    public static void WhenSettingUpdated(SettingTracker<bool> tracker) {
-        NoonUtility.Log(string.Format("RegainTickOnCreation: Setting Updated {0}", tracker.current));
-        if (tracker.current) {
-            RegainTickOnCreation.Enable();
-        } else {
-            RegainTickOnCreation.Disable();
-        }
-    }
-
-    public static void Enable() {
-    }
-
-    public static void Disable() {
-    }
 }
 
