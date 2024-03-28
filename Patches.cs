@@ -17,19 +17,6 @@ public class MainPatch : Patch
         this.patch = AccessTools.Method(typeof(MainPatch), "Postfix");
     }
 
-    //public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-    //{
-    //    var codes = new List<CodeInstruction>(instructions);
-        //int ind = PatchHelper.FindLdstrOperand(codes, "SituationTokenSpawn");
-        //codes.Insert(ind - 7, new CodeInstruction(OpCodes.Ldloc_1)); //token
-        //codes.Insert(ind - 6, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Token), "get_Payload")));
-        //codes.Insert(ind - 5, new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(IManifestable), "GetTimeshadow")));
-        //codes.Insert(ind - 4, new CodeInstruction(OpCodes.Dup));
-        //codes.Insert(ind - 3, new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(Timeshadow), "_lifetimeAccurate")));
-        //codes.Insert(ind - 2, new CodeInstruction(OpCodes.Ldc_I4_1));
-        //codes.Insert(ind - 1, new CodeInstruction(OpCodes.Add));
-        //codes.Insert(ind - 0, new CodeInstruction(OpCodes.Stfld, AccessTools.Field(typeof(Timeshadow), "_lifetimeAccurate")));
-        
         //int ind = PatchHelper.FindLdstrOperand(codes, "SituationTokenSpawn", 1);
         //codes.Insert(ind - 4, new CodeInstruction(OpCodes.Dup)); //token
         //codes.Insert(ind - 2, new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Token), "get_Payload")));
