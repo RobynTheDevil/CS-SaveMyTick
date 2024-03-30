@@ -12,8 +12,7 @@ using HarmonyLib;
 
 public class SaveMyTick : MonoBehaviour
 {
-
-    public static PatchTracker tracePatch {get; private set;}
+    public static bool started = false;
     public static PatchTracker situationPatch {get; private set;}
     public static PatchTracker changePatchPre {get; private set;}
     public static PatchTracker changePatchPost {get; private set;}
@@ -21,16 +20,29 @@ public class SaveMyTick : MonoBehaviour
     public static PatchTracker convertPatch {get; private set;}
     public static PatchTracker acceptPatch {get; private set;}
 
-    public void Start() {
+    public void Start() => SceneManager.sceneLoaded += Load;
+
+    public void OnDestroy() => SceneManager.sceneLoaded -= Load;
+
+    public void Load() {
         try
         {
-            //tracePatch       = new PatchTracker("SaveMyTick", new TracePatch());
-            situationPatch   = new PatchTracker("SaveMyTick", new SituationPatch());
-            changePatchPre   = new PatchTracker("SaveMyTick", new ChangePatch("Prefix"));
-            changePatchPost  = new PatchTracker("SaveMyTick", new ChangePatch("Postfix"));
-            constructorPatch = new PatchTracker("SaveMyTick", new ConstructorPatch());
-            convertPatch     = new PatchTracker("SaveMyTick", new ConvertPatch());
-            acceptPatch      = new PatchTracker("SaveMyTick", new AcceptPatch());
+            if (!started) {
+                situationPatch   = new PatchTracker("SaveMyTick", new SituationPatch());
+                changePatchPre   = new PatchTracker("SaveMyTick", new ChangePatch("Prefix"));
+                changePatchPost  = new PatchTracker("SaveMyTick", new ChangePatch("Postfix"));
+                constructorPatch = new PatchTracker("SaveMyTick", new ConstructorPatch());
+                convertPatch     = new PatchTracker("SaveMyTick", new ConvertPatch());
+                acceptPatch      = new PatchTracker("SaveMyTick", new AcceptPatch());
+                started = true;
+            } else {
+                situationPatch.Subscribe();
+                changePatchPre.Subscribe();
+                changePatchPost.Subscribe();
+                constructorPatch.Subscribe();
+                convertPatch.Subscribe();
+                acceptPatch.Subscribe();
+            }
         }
         catch (Exception ex)
         {
