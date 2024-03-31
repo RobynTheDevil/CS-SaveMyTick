@@ -9,30 +9,35 @@ using SecretHistories.Commands;
 using SecretHistories.Logic;
 using SecretHistories.Abstract;
 using SecretHistories.Spheres;
+using SecretHistories.States;
+using SecretHistories.Enums;
 using HarmonyLib;
 
 public class TracePatch : Patch
 {
     public TracePatch() {
-        this.original = AccessTools.Method(typeof(TokenCreationCommand), "Execute");
-        this.patch = AccessTools.Method(typeof(TracePatch), "Prefix");
+        this.original = AccessTools.Method(typeof(Situation), "TransitionToState");
+        this.patch = AccessTools.Method(typeof(TracePatch), "Postfix");
     }
 
     // Trace
-    public static void Prefix(TokenCreationCommand __instance){
-        float lifetime;
-        ITokenPayloadCreationCommand payload = __instance.Payload;
-        if (payload is ElementStackCreationCommand) {
-            lifetime = ((ElementStackCreationCommand)payload).LifetimeRemaining;
-        } else if (payload is SituationCreationCommand) {
-            lifetime = ((SituationCreationCommand)payload).TimeRemaining;
-        } else {
-            return;
-        }
-        if (lifetime > 0.0f)
-        {
-            NoonUtility.Log(string.Format("SaveMyTick: Before Create Token: {0}, {1}", __instance, lifetime));
-        }
+    public static void Postfix(SituationState newState){
+        NoonUtility.Log(string.Format("SaveMyTick: Trace TransitionToState, {0}", newState.Identifier));
+    }
+
+}
+
+public class TracePatch2 : Patch
+{
+    public TracePatch2() {
+        this.original = AccessTools.Method(typeof(Sphere), "AcceptToken", new Type[] {typeof(Token), typeof(Context)});
+        this.patch = AccessTools.Method(typeof(TracePatch2), "Postfix");
+    }
+
+    public static void Postfix(ref Sphere __instance, Token token, Context context) {
+        Traverse lifetime = Traverse.Create(token.Payload.GetTimeshadow()).Field("_lifetimeAccurate");
+        NoonUtility.Log(string.Format("SaveMyTick: Sphere AcceptToken (Post): {0}, {1}, {2}, {3}",
+                    lifetime.GetValue<int>(), context.actionSource, token.Payload, __instance));
     }
 
 }
@@ -51,12 +56,12 @@ public class SituationPatch : Patch
             return;
         Traverse lifetime = Traverse.Create(__result.Payload.GetTimeshadow()).Field("_lifetimeAccurate");
         int ticks = lifetime.GetValue<int>();
-        if (ticks <= 0)
-            return;
-        if (__result.Payload.GetType() != typeof(Situation))
+        bool isSituation = __result.Payload.GetType() == typeof(Situation);
+        bool isDebug = context.actionSource == Context.ActionSource.Debug;
+        if (ticks <= 0 || !isSituation || isDebug)
             return;
         lifetime.SetValue(ticks + 1);
-        NoonUtility.Log(string.Format("SaveMyTick: Saved Tick (Create Situation): {0} -> {1}", ticks, lifetime.GetValue<int>()));
+        NoonUtility.Log(string.Format("SaveMyTick: Saved Tick (Create Situation): {0} -> {1}, {2}", ticks, lifetime.GetValue<int>(), context.actionSource));
         //NoonUtility.Log(string.Format("Action Source {0}", context.actionSource));
     }
 
@@ -132,20 +137,29 @@ public class ConvertPatch : Patch
 public class AcceptPatch : Patch
 {
     public AcceptPatch() {
-        this.original = AccessTools.Method(typeof(SituationStorageSphere), "AcceptToken", new Type[] {typeof(Token), typeof(Context)});
-        this.patch = AccessTools.Method(typeof(AcceptPatch), "Prefix");
+        this.original = AccessTools.Method(typeof(Sphere), "AcceptToken", new Type[] {typeof(Token), typeof(Context)});
+        this.patch = AccessTools.Method(typeof(AcceptPatch), "Postfix");
     }
 
-    public static void Prefix(Token token, Context context)
+    public static void Postfix(ref Sphere __instance, Token token, Context context)
     {
         if (Watchman.Get<Heart>().Metapaused)
+            return;
+        Type type = __instance.GetType();
+        bool isStorage = type == typeof(SituationStorageSphere);
+        bool isOutput = type == typeof(OutputSphere);
+        bool isFlush = context.actionSource == Context.ActionSource.FlushingTokens;
+        bool isEnRoute = type == typeof(EnRouteSphere);
+        bool isGreedy = context.actionSource == Context.ActionSource.GreedyGrab;
+        if (! ((isOutput && isFlush) || (isEnRoute && isGreedy)))
             return;
         Traverse lifetime = Traverse.Create(token.Payload).Field("_timeshadow").Field("_lifetimeAccurate");
         int ticks = lifetime.GetValue<int>();
         if (ticks <= 0)
             return;
         lifetime.SetValue(ticks + 1);
-        NoonUtility.Log(string.Format("SaveMyTick: Saved Tick (Accept): {0} -> {1}, {2}, {3}", ticks, lifetime.GetValue<int>(), context.actionSource, token.Payload));
+        NoonUtility.Log(string.Format("SaveMyTick: Saved Tick (Accept): {0} -> {1}, {2}, {3}, {4}",
+            ticks, lifetime.GetValue<int>(), context.actionSource, token.Payload, __instance));
     }
 
 }

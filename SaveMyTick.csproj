@@ -38,6 +38,7 @@
     <Reference Include="UnityEngine.CoreModule" HintPath="D:\Steam\steamapps\common\Cultist Simulator\cultistsimulator_Data\Managed\UnityEngine.CoreModule.dll" />
     <Reference Include="SecretHistories.Main" HintPath="D:\Steam\steamapps\common\Cultist Simulator\cultistsimulator_Data\Managed\SecretHistories.Main.dll" />
     <Reference Include="SecretHistories.Interfaces" HintPath="D:\Steam\steamapps\common\Cultist Simulator\cultistsimulator_Data\Managed\SecretHistories.Interfaces.dll" />
+    <Reference Include="SecretHistories.Enums" HintPath="D:\Steam\steamapps\common\Cultist Simulator\cultistsimulator_Data\Managed\SecretHistories.Enums.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SaveMyTick.cs" />
