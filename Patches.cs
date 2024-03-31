@@ -67,37 +67,6 @@ public class SituationPatch : Patch
 
 }
 
-public class ChangePatch : Patch
-{
-    public ChangePatch(string type) {
-        this.original = AccessTools.Method(typeof(ElementStack), "ChangeTo", new Type[] {typeof(string)});
-        this.patch = AccessTools.Method(typeof(ChangePatch), type);
-    }
-
-    public class State {
-        public int prev;
-        public bool decays;
-    }
-
-    public static void Prefix(ref ElementStack __instance, ref State __state) {
-        __state = new State();
-        __state.prev = Traverse.Create(__instance).Field("_timeshadow").Field("_lifetimeAccurate").GetValue<int>();
-        __state.decays = __instance.Decays;
-    }
-
-    public static void Postfix(ref ElementStack __instance, ref State __state) {
-        if (Watchman.Get<Heart>().Metapaused || (__state.decays && __state.prev <= 0))
-            return;
-        Traverse lifetime = Traverse.Create(__instance).Field("_timeshadow").Field("_lifetimeAccurate");
-        int ticks = lifetime.GetValue<int>();
-        if (ticks <= 0)
-            return;
-        lifetime.SetValue(ticks + 1);
-        NoonUtility.Log(string.Format("SaveMyTick: Saved Tick (Card Change): {0} -> {1}", ticks, lifetime.GetValue<int>()));
-    }
-    
-}
-
 public class ConstructorPatch : Patch
 {
     public ConstructorPatch() {

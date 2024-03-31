@@ -24,10 +24,6 @@ public class SaveMyTick : MonoBehaviour
     public static PatchTracker tracePatch {get; private set;}
     public static PatchTracker tracePatch2 {get; private set;}
 
-    //usused
-    public static PatchTracker changePatchPre {get; private set;}
-    public static PatchTracker changePatchPost {get; private set;}
-
     public void Start() => SceneManager.sceneLoaded += Load;
 
     public void OnDestroy() => SceneManager.sceneLoaded -= Load;
@@ -41,9 +37,7 @@ public class SaveMyTick : MonoBehaviour
                 convertPatch     = new PatchTracker("SaveMyTick", new ConvertPatch());
                 acceptPatch      = new PatchTracker("SaveMyTick", new AcceptPatch());
                 //tracePatch       = new PatchTracker("SaveMyTick", new TracePatch());
-                tracePatch2      = new PatchTracker("SaveMyTick", new TracePatch2());
-                //changePatchPre   = new PatchTracker("SaveMyTick", new ChangePatch("Prefix"));
-                //changePatchPost  = new PatchTracker("SaveMyTick", new ChangePatch("Postfix"));
+                //tracePatch2      = new PatchTracker("SaveMyTick", new TracePatch2());
                 started = true;
             } else {
                 situationPatch.Subscribe();
@@ -51,9 +45,7 @@ public class SaveMyTick : MonoBehaviour
                 convertPatch.Subscribe();
                 acceptPatch.Subscribe();
                 //tracePatch.Subscribe();
-                tracePatch2.Subscribe();
-                //changePatchPre.Subscribe();
-                //changePatchPost.Subscribe();
+                //tracePatch2.Subscribe();
             }
         }
         catch (Exception ex)
